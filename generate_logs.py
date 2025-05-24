@@ -190,8 +190,11 @@ def generate_log_batch(batch_size: int = 10) -> List[Dict[str, Union[str, int]]]
         logs.append(log.to_dict()) # type: ignore
     return logs
 
-# Function to output the logs based on selected mode
-def output_logs(logs: List[Dict[str, object]], mode: str = "stdout", file_name: str = "logs.json") -> None:
+# Function to output to stdout logs based on batch mode
+def output_logs(
+        logs: List[Dict[str, object]], 
+        mode: str = "stdout", 
+        file_name: str = "logs.json") -> None:
     try:
         if mode == "stdout":
             print(json.dumps(logs, indent=2))
@@ -208,6 +211,7 @@ def output_logs(logs: List[Dict[str, object]], mode: str = "stdout", file_name: 
     except Exception as e:
         print(f"Failed to output logs due to: {e}")
 
+# Function to output logs based on streaming mode
 def output_logs_streaming(
     logs: List[Dict[str, Union[str, int]]],
     file_name: str = "logs_stream.jsonl"
