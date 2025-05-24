@@ -112,6 +112,8 @@ class LogStreamer:
     ) -> None:
         self.mode = mode
         resolved_file_name: str
+        # Use datetime.now(timezone.utc) for a timezone-aware UTC datetime
+        ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
         """
         Args:
             mode: One of 'stream', 'batch', or 'parquet'.
@@ -120,13 +122,11 @@ class LogStreamer:
         """
         # Generate a dynamic filename if not provided
         if file_name is None:
-            # Use datetime.now(datetime.timezone.utc) for a timezone-aware UTC datetime
-            ts = datetime.datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S") # type: ignore
             ext = {"stream": "jsonl", "batch": "json", "parquet": "parquet"}[mode]
             resolved_file_name = f"logs_{mode}_{ts}.{ext}"
         else:
             # If file_name was provided, use it
-            resolved_file_name = file_name
+            resolved_file_name = f"{ts}_{file_name}"
 
         # Resolve to an absolute path if necessary
         if not os.path.isabs(resolved_file_name):
